@@ -11,5 +11,8 @@
         <file>qml/PageViewSettings.qml</file>
         <file>qml/main.qml</file>
         <file>qml/PageMenu.qml</file>
+        <file>qml/CustomSpinBox.qml</file>
+        <file>qml/PageIntervalCompare.qml</file>
+        <file>qml/DigitSpinBox.qml</file>
     </qresource>
 </RCC>

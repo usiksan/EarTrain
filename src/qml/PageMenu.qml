@@ -27,7 +27,7 @@ Page {
     spacing: 10
     Button {
       text: "1/2 полутона"
-      onClicked: csPlayer.intervalCompare( true, 1, 2 );
+      onClicked: rootStack.push( pageIntervalCompare )
     }
   }
 

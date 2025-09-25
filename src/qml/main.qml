@@ -40,6 +40,11 @@ Window {
   }
 
   Component {
+    id: pageIntervalCompare
+    PageIntervalCompare {}
+  }
+
+  Component {
     id: pageScore
     PageScore {}
   }
