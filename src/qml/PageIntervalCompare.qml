@@ -63,7 +63,7 @@ Page {
       id: maxNote
       value: 96
       minValue: minNote.value + 1
-      onValueChanged: csPlayer.maxInterval = value
+      onValueChanged: csPlayer.maxNote = value
     }
 
     Button {
