@@ -26,7 +26,7 @@ Page {
     columns: 4
     spacing: 10
     Button {
-      text: "1/2 полутона"
+      text: qsTr("Сравнение интервалов")
       onClicked: rootStack.push( pageIntervalCompare )
     }
   }
