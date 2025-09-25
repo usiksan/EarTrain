@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ttf/NotoMusic-Regular.ttf</file>
+        <file>qml/ModernNote.qml</file>
+        <file>qml/Score.qml</file>
+        <file>qml/ScoreWidget.qml</file>
+        <file>qml/ModernClef.qml</file>
+        <file>qml/PageScore.qml</file>
+        <file>qml/PianoKeyboard.qml</file>
+        <file>qml/PianoOctave.qml</file>
+        <file>qml/PageViewSettings.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/PageMenu.qml</file>
+    </qresource>
+</RCC>
