@@ -27,6 +27,9 @@ class CsEarTrainer : public CsPlayer
     int                 mMaxInterval;
     int                 mResult;
 
+    int                 mMinNote;
+    int                 mMaxNote;
+
     QList<IntervalPair> mErrors;
     IntervalPair        mCurrent;
     int                 mErrorRepeate;
@@ -53,6 +56,13 @@ class CsEarTrainer : public CsPlayer
     int  errors() const { return mErrors.count(); }
 
     QString statistic() const;
+
+    int     minNote() const { return mMinNote; }
+    void    minNoteSet(int newMinNote);
+
+    int     maxNote() const { return mMaxNote; }
+    void    maxNoteSet(int newMaxNote);
+
   public slots:
     void intervalCompare( bool singleFirst, int minInterval, int maxInterval );
 
@@ -69,6 +79,8 @@ class CsEarTrainer : public CsPlayer
     void resultChanged();
     void errorsChanged();
     void statisticChanged();
+    void minNoteChanged();
+    void maxNoteChanged();
 
   private:
     Q_PROPERTY(bool singleFirst READ singleFirst WRITE singleFirstSet NOTIFY singleFirstChanged FINAL)
@@ -77,6 +89,8 @@ class CsEarTrainer : public CsPlayer
     Q_PROPERTY(int result READ result WRITE resultSet NOTIFY resultChanged FINAL)
     Q_PROPERTY(int errors READ errors NOTIFY errorsChanged FINAL)
     Q_PROPERTY(QString statistic READ statistic NOTIFY statisticChanged FINAL)
+    Q_PROPERTY(int minNote READ minNote WRITE minNoteSet NOTIFY minNoteChanged FINAL)
+    Q_PROPERTY(int maxNote READ maxNote WRITE maxNoteSet NOTIFY maxNoteChanged FINAL)
   };
 
 #endif // CSEARTRAINER_H

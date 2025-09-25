@@ -7,11 +7,14 @@
 #define NOTE_PAUSE_SHORT duraEighth
 #define NOTE_PAUSE_LONG  duraHalf
 
+
 CsEarTrainer::CsEarTrainer(QObject *parent)
   : CsPlayer{parent}
   , mSingleFirst(true)
   , mMinInterval(1)
   , mMaxInterval(2)
+  , mMinNote(NOTE_KEY_MIN)
+  , mMaxNote(NOTE_KEY_MAX)
   , mErrorRepeate(0)
   , mErrorCount(0)
   , mTestCount(0)
@@ -57,8 +60,26 @@ void CsEarTrainer::resultSet(int newResult)
 
 QString CsEarTrainer::statistic() const
   {
-  return tr("Всего ошибок: %1 из %2 попыток    Качество: %3").arg(mErrorCount).arg(mTestCount).arg( 100.0 - (double)mErrorCount * 100.0 / ((double)mTestCount + 0.0001), 0, 'g', 1 );
+  return tr("Всего ошибок: %1 из %2 попыток    Качество: %3").arg(mErrorCount).arg(mTestCount).arg( 100.0 - (double)mErrorCount * 100.0 / ((double)mTestCount + 0.0001), 0, 'f', 1 );
   }
+
+
+void CsEarTrainer::minNoteSet(int newMinNote)
+  {
+  if (mMinNote == newMinNote)
+    return;
+  mMinNote = newMinNote;
+  emit minNoteChanged();
+  }
+
+void CsEarTrainer::maxNoteSet(int newMaxNote)
+  {
+  if (mMaxNote == newMaxNote)
+    return;
+  mMaxNote = newMaxNote;
+  emit maxNoteChanged();
+  }
+
 
 
 
@@ -83,27 +104,29 @@ void CsEarTrainer::repeate()
 void CsEarTrainer::next(bool isCorrect)
   {
   mTestCount++;
-  if( !isCorrect ) {
-    //Common error count
-    mErrorCount++;
-    //Store as error previous pair
-    mErrors.append( mCurrent );
-    emit errorsChanged();
-    }
-  else if( mErrors.count() && mErrorRepeate > 7 ) {
+  if( isCorrect && mErrors.count() && mErrorRepeate > 7 ) {
     //Repeat interval with error
     mCurrent = mErrors.takeFirst();
     mErrorRepeate = 0;
+    emit errorsChanged();
     }
   else {
+    if( !isCorrect ) {
+      //Common error count
+      mErrorCount++;
+      //Store as error previous pair
+      mErrors.append( mCurrent );
+      emit errorsChanged();
+      }
+
     if( mErrors.count() )
       mErrorRepeate++;
     else
       mErrorRepeate = 0;
 
     //Select start note for both intervals
-    mCurrent.mFirst1  = mRandom.bounded( NOTE_KEY_MIN, NOTE_KEY_MAX );
-    mCurrent.mSecond1 = mRandom.bounded( NOTE_KEY_MIN, NOTE_KEY_MAX );
+    mCurrent.mFirst1  = mRandom.bounded( mMinNote, mMaxNote );
+    mCurrent.mSecond1 = mRandom.bounded( mMinNote, mMaxNote );
     //If we use single first note then union start notes
     if( mSingleFirst )
       mCurrent.mSecond1 = mCurrent.mFirst1;

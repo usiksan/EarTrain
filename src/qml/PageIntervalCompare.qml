@@ -47,6 +47,43 @@ Page {
     spacing: 20
 
     Text {
+      text: qsTr("минимальная нота")
+    }
+    DigitSpinBox {
+      id: minNote
+      value: 36
+      maxValue: maxNote.value - 1
+      onValueChanged: csPlayer.minNote = value
+    }
+
+    Text {
+      text: qsTr("максимальная нота")
+    }
+    DigitSpinBox {
+      id: maxNote
+      value: 96
+      minValue: minNote.value + 1
+      onValueChanged: csPlayer.maxInterval = value
+    }
+
+    Button {
+      text: qsTr("36-96")
+      onClicked: {
+        minNote.value = 36
+        maxNote.value = 96
+      }
+    }
+
+    Button {
+      text: qsTr("60-72")
+      onClicked: {
+        minNote.value = 60
+        maxNote.value = 72
+      }
+    }
+
+
+    Text {
       text: qsTr("минимальный интервал")
     }
     DigitSpinBox {
