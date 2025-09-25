@@ -92,14 +92,14 @@ Page {
       width: 600
       height: 150
       text: qsTr("Далее")
-      onClicked: csPlayer.next()
+      onClicked: csPlayer.next(true)
     }
 
     Text {
       text: " "
     }
     Text {
-      text: " "
+      text: qsTr("Неповторенных ошибок:") + csPlayer.errors
     }
 
     Text {
@@ -112,7 +112,7 @@ Page {
     }
 
     Text {
-      text: " "
+      text: csPlayer.statistic
     }
     Text {
       text: " "
@@ -131,7 +131,7 @@ Page {
       text: qsTr("Первый")
       onClicked: {
         idIntervalComparePage.correct = csPlayer.result === 1
-        csPlayer.next()
+        csPlayer.next( idIntervalComparePage.correct )
       }
     }
 
@@ -141,7 +141,7 @@ Page {
       text: qsTr("Второй")
       onClicked: {
         idIntervalComparePage.correct = csPlayer.result === 2
-        csPlayer.next()
+        csPlayer.next( idIntervalComparePage.correct )
       }
     }
   }

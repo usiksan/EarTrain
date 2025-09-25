@@ -12,6 +12,9 @@ CsEarTrainer::CsEarTrainer(QObject *parent)
   , mSingleFirst(true)
   , mMinInterval(1)
   , mMaxInterval(2)
+  , mErrorRepeate(0)
+  , mErrorCount(0)
+  , mTestCount(0)
   {
 
   }
@@ -49,13 +52,23 @@ void CsEarTrainer::resultSet(int newResult)
   emit resultChanged();
   }
 
+
+
+
+QString CsEarTrainer::statistic() const
+  {
+  return tr("Всего ошибок: %1 из %2 попыток    Качество: %3").arg(mErrorCount).arg(mTestCount).arg( 100.0 - (double)mErrorCount * 100.0 / ((double)mTestCount + 0.0001), 0, 'g', 1 );
+  }
+
+
+
 void CsEarTrainer::intervalCompare(bool singleFirst, int minInterval, int maxInterval)
   {
   singleFirstSet( singleFirst );
   minIntervalSet( minInterval );
   maxIntervalSet( maxInterval );
 
-  next();
+  next(true);
   }
 
 
@@ -67,43 +80,70 @@ void CsEarTrainer::repeate()
 
 
 
-void CsEarTrainer::next()
+void CsEarTrainer::next(bool isCorrect)
   {
-  //Select start note for both intervals
-  int start1 = mRandom.bounded( NOTE_KEY_MIN, NOTE_KEY_MAX );
-  int start2 = mRandom.bounded( NOTE_KEY_MIN, NOTE_KEY_MAX );
-  //If we use single first note then union start notes
-  if( mSingleFirst ) start2 = start1;
-
-  int direction = mRandom.bounded( NOTE_KEY_MIN, NOTE_KEY_MAX );
-
-  int firstInterval = mRandom.bounded( mMinInterval, mMaxInterval + 1 );
-  int secondInterval;
-  do {
-    secondInterval = mRandom.bounded( mMinInterval, mMaxInterval + 1 );
+  mTestCount++;
+  if( !isCorrect ) {
+    //Common error count
+    mErrorCount++;
+    //Store as error previous pair
+    mErrors.append( mCurrent );
+    emit errorsChanged();
     }
-  while( secondInterval == firstInterval );
-
-  resultSet( firstInterval > secondInterval ? 1 : 2 );
-
-  int startTick = 0;
-  if( direction & 1 ) {
-    //Down direction
-    firstInterval = -firstInterval;
-    secondInterval = -secondInterval;
+  else if( mErrors.count() && mErrorRepeate > 7 ) {
+    //Repeat interval with error
+    mCurrent = mErrors.takeFirst();
+    mErrorRepeate = 0;
     }
+  else {
+    if( mErrors.count() )
+      mErrorRepeate++;
+    else
+      mErrorRepeate = 0;
+
+    //Select start note for both intervals
+    mCurrent.mFirst1  = mRandom.bounded( NOTE_KEY_MIN, NOTE_KEY_MAX );
+    mCurrent.mSecond1 = mRandom.bounded( NOTE_KEY_MIN, NOTE_KEY_MAX );
+    //If we use single first note then union start notes
+    if( mSingleFirst )
+      mCurrent.mSecond1 = mCurrent.mFirst1;
+
+    int direction = mRandom.bounded( NOTE_KEY_MIN, NOTE_KEY_MAX );
+
+    int firstInterval = mRandom.bounded( mMinInterval, mMaxInterval + 1 );
+    int secondInterval;
+    do {
+      secondInterval = mRandom.bounded( mMinInterval, mMaxInterval + 1 );
+      }
+    while( secondInterval == firstInterval );
+
+    mCurrent.mResult = firstInterval > secondInterval ? 1 : 2;
+
+    if( direction & 1 ) {
+      //Down direction
+      firstInterval = -firstInterval;
+      secondInterval = -secondInterval;
+      }
+
+    mCurrent.mFirst2 = mCurrent.mFirst1 + firstInterval;
+    mCurrent.mSecond2 = mCurrent.mSecond1 + secondInterval;
+    }
+
+  emit statisticChanged();
+  resultSet( mCurrent.mResult );
 
   mEventMap.clear();
   mVoiceMap.clear();
+  int startTick = 0;
 
-  noteAdd( start1, startTick );
+  noteAdd( mCurrent.mFirst1, startTick );
   startTick += NOTE_DURATION + NOTE_PAUSE_SHORT;
-  noteAdd( start1 + firstInterval, startTick );
+  noteAdd( mCurrent.mFirst2, startTick );
   startTick += NOTE_DURATION + NOTE_PAUSE_LONG;
 
-  noteAdd( start2, startTick );
+  noteAdd( mCurrent.mSecond1, startTick );
   startTick += NOTE_DURATION + NOTE_PAUSE_SHORT;
-  noteAdd( start2 + secondInterval, startTick );
+  noteAdd( mCurrent.mSecond2, startTick );
   startTick += NOTE_DURATION;
 
   mTickMax = mTickEnd = startTick;
