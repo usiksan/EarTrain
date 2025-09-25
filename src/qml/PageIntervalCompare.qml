@@ -44,6 +44,7 @@ Page {
 
   Grid {
     columns: 2
+    spacing: 10
 
     Text {
       text: qsTr("минимальный интервал")
@@ -69,6 +70,7 @@ Page {
     }
     CheckBox {
       checkable: true
+      checked: true
       onCheckedChanged: csPlayer.singleFirst = checked
     }
 

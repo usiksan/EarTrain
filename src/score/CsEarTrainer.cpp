@@ -9,7 +9,7 @@
 
 CsEarTrainer::CsEarTrainer(QObject *parent)
   : CsPlayer{parent}
-  , mSingleFirst(false)
+  , mSingleFirst(true)
   , mMinInterval(1)
   , mMaxInterval(2)
   {
