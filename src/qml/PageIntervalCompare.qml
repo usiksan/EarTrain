@@ -44,7 +44,7 @@ Page {
 
   Grid {
     columns: 2
-    spacing: 10
+    spacing: 20
 
     Text {
       text: qsTr("минимальный интервал")
@@ -82,11 +82,15 @@ Page {
     }
 
     Button {
+      width: 600
+      height: 150
       text: qsTr("Повторить")
       onClicked: csPlayer.repeate()
     }
 
     Button {
+      width: 600
+      height: 150
       text: qsTr("Далее")
       onClicked: csPlayer.next()
     }
@@ -100,6 +104,8 @@ Page {
 
     Text {
       text: idIntervalComparePage.correct ? qsTr("Верно") : qsTr("Ошибка")
+      color: idIntervalComparePage.correct ? "green" : "red"
+      font.pixelSize: 48
     }
     Text {
       text: " "
@@ -120,13 +126,23 @@ Page {
     }
 
     Button {
+      width: 600
+      height: 150
       text: qsTr("Первый")
-      onClicked: idIntervalComparePage.correct = csPlayer.result == 1
+      onClicked: {
+        idIntervalComparePage.correct = csPlayer.result === 1
+        csPlayer.next()
+      }
     }
 
     Button {
+      width: 600
+      height: 150
       text: qsTr("Второй")
-      onClicked: idIntervalComparePage.correct = csPlayer.result == 2
+      onClicked: {
+        idIntervalComparePage.correct = csPlayer.result === 2
+        csPlayer.next()
+      }
     }
   }
 }
