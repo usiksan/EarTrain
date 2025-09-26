@@ -23,12 +23,15 @@ Page {
   property real scale : 1.0
 
   Grid {
-    columns: 4
+    columns: 2
     spacing: 10
     Button {
+      width: 600
+      height: 150
       text: qsTr("Сравнение интервалов")
       onClicked: rootStack.push( pageIntervalCompare )
     }
+
   }
 
 
