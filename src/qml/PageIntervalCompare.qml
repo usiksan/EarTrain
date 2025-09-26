@@ -93,7 +93,7 @@ Page {
     }
 
     Text {
-      text: qsTr("минимальный интервал")
+      text: qsTr("максимальный интервал")
     }
     DigitSpinBox {
       id: upLimit
@@ -129,7 +129,7 @@ Page {
       width: 600
       height: 150
       text: qsTr("Далее")
-      onClicked: csPlayer.next(true)
+      onClicked: csPlayer.nextIntervalCompare(true)
     }
 
     Text {
@@ -168,7 +168,7 @@ Page {
       text: qsTr("Первый")
       onClicked: {
         idIntervalComparePage.correct = csPlayer.result === 1
-        csPlayer.next( idIntervalComparePage.correct )
+        csPlayer.nextIntervalCompare( idIntervalComparePage.correct )
       }
     }
 
@@ -178,7 +178,7 @@ Page {
       text: qsTr("Второй")
       onClicked: {
         idIntervalComparePage.correct = csPlayer.result === 2
-        csPlayer.next( idIntervalComparePage.correct )
+        csPlayer.nextIntervalCompare( idIntervalComparePage.correct )
       }
     }
   }

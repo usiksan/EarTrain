@@ -83,16 +83,6 @@ void CsEarTrainer::maxNoteSet(int newMaxNote)
 
 
 
-void CsEarTrainer::intervalCompare(bool singleFirst, int minInterval, int maxInterval)
-  {
-  singleFirstSet( singleFirst );
-  minIntervalSet( minInterval );
-  maxIntervalSet( maxInterval );
-
-  next(true);
-  }
-
-
 
 void CsEarTrainer::repeate()
   {
@@ -101,7 +91,7 @@ void CsEarTrainer::repeate()
 
 
 
-void CsEarTrainer::next(bool isCorrect)
+void CsEarTrainer::nextIntervalCompare(bool isCorrect)
   {
   mTestCount++;
   if( isCorrect && mErrors.count() && mErrorRepeate > 7 ) {

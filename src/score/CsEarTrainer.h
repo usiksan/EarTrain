@@ -64,11 +64,11 @@ class CsEarTrainer : public CsPlayer
     void    maxNoteSet(int newMaxNote);
 
   public slots:
-    void intervalCompare( bool singleFirst, int minInterval, int maxInterval );
-
     void repeate();
 
-    void next( bool isCorrect );
+    void nextIntervalCompare( bool isCorrect );
+
+    //void nextIntervalMeasure();
 
   private:
     void noteAdd( int pitch, int startTick );
